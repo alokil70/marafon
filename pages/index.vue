@@ -1,81 +1,81 @@
 <template>
-    <v-layout column justify-center align-center>
-        <v-flex xs12 sm8 md6>
-            <div class="text-center">
-                <logo />
-                <vuetify-logo />
-            </div>
-            <v-card>
-                <v-card-title class="headline">
-                    Welcome to the Vuetify + Nuxt.js template
-                </v-card-title>
-                <v-card-text>
-                    <p>
-                        Vuetify is a progressive Material Design component
-                        framework for Vue.js. It was designed to empower
-                        developers to create amazing applications.
-                    </p>
-                    <p>
-                        For more information on Vuetify, check out the
-                        <a href="https://vuetifyjs.com" target="_blank">
-                            documentation </a
-                        >.
-                    </p>
-                    <p>
-                        If you have questions, please join the official
-                        <a
-                            href="https://chat.vuetifyjs.com/"
-                            target="_blank"
-                            title="chat"
-                        >
-                            discord </a
-                        >.
-                    </p>
-                    <p>
-                        Find a bug? Report it on the github
-                        <a
-                            href="https://github.com/vuetifyjs/vuetify/issues"
-                            target="_blank"
-                            title="contribute"
-                        >
-                            issue board </a
-                        >.
-                    </p>
-                    <p>
-                        Thank you for developing with Vuetify and I look forward
-                        to bringing more exciting features in the future.
-                    </p>
-                    <div class="text-xs-right">
-                        <em><small>&mdash; John Leider</small></em>
-                    </div>
-                    <hr class="my-3" />
-                    <a href="https://nuxtjs.org/" target="_blank">
-                        Nuxt Documentation
-                    </a>
-                    <br />
-                    <a href="https://github.com/nuxt/nuxt.js" target="_blank">
-                        Nuxt GitHub
-                    </a>
-                </v-card-text>
-                <v-card-actions>
-                    <v-spacer />
-                    <v-btn color="primary" nuxt to="/inspire">
-                        Continue
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-flex>
+    <v-layout row justify-center align-center>
+        <v-row class="flex" justify="center">
+            <v-card
+                v-for="p in products"
+                :key="p.id"
+                :ripple="true"
+                @click="show"
+                :img="`${URL}${p.imageName}`"
+                elevation="24"
+                height="400px"
+                class="portrait"
+                >{{ p.text }}</v-card
+            >
+        </v-row>
+
+        <v-menu
+            v-model="showMenu"
+            :position-x="x"
+            :position-y="y"
+            absolute
+            offset-y
+        >
+            <v-list>
+                <v-list-item
+                    v-for="(item, index) in items"
+                    :key="index"
+                    @click=""
+                >
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
     </v-layout>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
 export default {
-    components: {
-        Logo,
-        VuetifyLogo
+    data: () => ({
+        URL: 'http://192.168.0.206:9000/img/',
+        showMenu: false,
+        x: 0,
+        y: 0,
+        items: [
+            { title: 'Что-то' },
+            { title: 'Какой-то выбор' },
+            { title: 'Что-нибуть' },
+            { title: 'И это ))' }
+        ]
+    }),
+    computed: {
+        products() {
+            return this.$store.getters['products/products']
+        }
+    },
+    async fetch({ store }) {
+        if (store.getters['products/products'].length === 0) {
+            await store.dispatch('products/fetch')
+        }
+    },
+    methods: {
+        show(e) {
+            e.preventDefault()
+            this.showMenu = false
+            this.x = e.clientX
+            this.y = e.clientY
+            this.$nextTick(() => {
+                this.showMenu = true
+            })
+        }
     }
 }
 </script>
+
+<style scoped>
+.portrait.v-card {
+    margin: 16px auto;
+    max-width: 400px;
+    width: 100%;
+}
+</style>

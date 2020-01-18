@@ -22,6 +22,20 @@
                         <v-list-item-title v-text="item.title" />
                     </v-list-item-content>
                 </v-list-item>
+                <v-expansion-panels focusable>
+                    <v-expansion-panel v-for="(item, i) in 5" :key="i">
+                        <v-expansion-panel-header
+                            >Item</v-expansion-panel-header
+                        >
+                        <v-expansion-panel-content>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing
+                            elit, sed do eiusmod tempor incididunt ut labore et
+                            dolore magna aliqua. Ut enim ad minim veniam, quis
+                            nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat.
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
             </v-list>
         </v-navigation-drawer>
         <v-app-bar :clipped-left="clipped" fixed app>
@@ -36,9 +50,6 @@
             <v-btn @click.stop="clipped = !clipped" icon>
                 <v-icon>mdi-application</v-icon>
             </v-btn>
-            <v-btn @click.stop="fixed = !fixed" icon>
-                <v-icon>mdi-minus</v-icon>
-            </v-btn>
             <v-toolbar-title v-text="title" />
             <v-spacer />
             <v-btn @click.stop="rightDrawer = !rightDrawer" icon>
@@ -50,25 +61,6 @@
                 <nuxt />
             </v-container>
         </v-content>
-        <v-navigation-drawer
-            v-model="rightDrawer"
-            :right="right"
-            temporary
-            fixed
-        >
-            <v-list>
-                <v-list-item @click.native="right = !right">
-                    <v-list-item-action>
-                        <v-icon light>
-                            mdi-repeat
-                        </v-icon>
-                    </v-list-item-action>
-                    <v-list-item-title
-                        >Switch drawer (click me)</v-list-item-title
-                    >
-                </v-list-item>
-            </v-list>
-        </v-navigation-drawer>
         <v-footer :fixed="fixed" app>
             <span>&copy; 2019</span>
         </v-footer>
@@ -85,8 +77,18 @@ export default {
             items: [
                 {
                     icon: 'mdi-apps',
-                    title: 'Welcome',
+                    title: 'Блюда',
                     to: '/'
+                },
+                {
+                    icon: 'mdi-apps',
+                    title: 'Редактор',
+                    to: '/addProducts'
+                },
+                {
+                    icon: 'mdi-apps',
+                    title: 'expansion panel',
+                    to: '/expansion-panel'
                 },
                 {
                     icon: 'mdi-chart-bubble',
