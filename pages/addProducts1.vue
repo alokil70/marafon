@@ -95,7 +95,7 @@ export default {
             {
                 text: 'Название',
                 align: 'left',
-                sortable: false,
+                sortable: true,
                 value: 'text'
             },
             { text: 'Calories', value: 'calories' },
@@ -104,7 +104,7 @@ export default {
             { text: 'Цена', value: 'text1' },
             { text: 'Изменить', value: 'action', sortable: false }
         ],
-        productsFormList: [],
+        desserts: [],
         editedIndex: -1,
         editedItem: {
             name: '',
@@ -124,7 +124,7 @@ export default {
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'Новое' : 'Edit Item'
+            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
         },
         products() {
             return this.$store.getters['products/products']
@@ -150,15 +150,15 @@ export default {
             console.log('reeegggfd')
         },
         editItem(item) {
-            this.editedIndex = this.productsFormList.indexOf(item)
+            this.editedIndex = this.desserts.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            const index = this.productsFormList.indexOf(item)
+            const index = this.desserts.indexOf(item)
             confirm('Are you sure you want to delete this item?') &&
-                this.productsFormList.splice(index, 1)
+                this.desserts.splice(index, 1)
         },
 
         close() {
@@ -171,12 +171,9 @@ export default {
 
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(
-                    this.productsFormList[this.editedIndex],
-                    this.editedItem
-                )
+                Object.assign(this.desserts[this.editedIndex], this.editedItem)
             } else {
-                this.productsFormList.push(this.editedItem)
+                this.desserts.push(this.editedItem)
             }
             this.close()
         }

@@ -1,4 +1,4 @@
-const URL = 'http://192.168.0.206:9000/message/'
+import { URL } from '../assets/constants'
 
 export const state = () => ({
     products: []

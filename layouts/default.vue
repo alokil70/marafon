@@ -4,10 +4,12 @@
             v-model="drawer"
             :mini-variant="miniVariant"
             :clipped="clipped"
+            mobile-break-point="850"
             fixed
+            width="200"
             app
         >
-            <v-list>
+            <v-list dense rounded>
                 <v-list-item
                     v-for="(item, i) in items"
                     :key="i"
@@ -22,7 +24,7 @@
                         <v-list-item-title v-text="item.title" />
                     </v-list-item-content>
                 </v-list-item>
-                <v-expansion-panels focusable>
+                <!--<v-expansion-panels focusable>
                     <v-expansion-panel v-for="(item, i) in 5" :key="i">
                         <v-expansion-panel-header
                             >Item</v-expansion-panel-header
@@ -35,7 +37,7 @@
                             ex ea commodo consequat.
                         </v-expansion-panel-content>
                     </v-expansion-panel>
-                </v-expansion-panels>
+                </v-expansion-panels>-->
             </v-list>
         </v-navigation-drawer>
         <v-app-bar :clipped-left="clipped" fixed app>
@@ -82,8 +84,18 @@ export default {
                 },
                 {
                     icon: 'mdi-apps',
+                    title: 'Блюда1',
+                    to: '/productsList'
+                },
+                {
+                    icon: 'mdi-apps',
                     title: 'Редактор',
                     to: '/addProducts'
+                },
+                {
+                    icon: 'mdi-apps',
+                    title: 'Редактор1',
+                    to: '/addProducts1'
                 },
                 {
                     icon: 'mdi-apps',
