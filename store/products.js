@@ -14,6 +14,9 @@ export const actions = {
     async fetch({ commit }) {
         const products = await this.$axios.$get(URL)
         commit('setProducts', products)
+    },
+    async objSave({ commit }, postData) {
+        await this.$axios.$post(URL, postData)
     }
 }
 

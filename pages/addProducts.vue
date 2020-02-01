@@ -13,7 +13,12 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                        <v-btn v-on="on" color="primary" small dark class="mb-2"
+                        <v-btn
+                            v-on="on"
+                            color="deep-purple"
+                            small
+                            dark
+                            class="mb-2"
                             >Добавить
                         </v-btn>
                     </template>
@@ -25,35 +30,50 @@
                         <v-card-text>
                             <v-container>
                                 <v-row>
-                                    <v-col cols="12" sm="6" md="4">
+                                    <v-col cols="12" sm="6" md="10">
                                         <v-text-field
-                                            v-model="editedItem.name"
-                                            label="Dessert name"
+                                            v-model="editedItem.productName"
+                                            label="Название"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="2">
+                                        <v-text-field
+                                            v-model.number="editedItem.price"
+                                            label="Цена"
+                                        ></v-text-field>
+                                    </v-col>
+                                    <v-col cols="12" sm="6" md="12">
+                                        <v-text-field
+                                            v-model="editedItem.description"
+                                            label="Описание"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field
-                                            v-model="editedItem.calories"
-                                            label="Calories"
+                                            v-model="editedItem.text"
+                                            label="text"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field
-                                            v-model="editedItem.fat"
-                                            label="Fat (g)"
+                                            v-model="editedItem.text1"
+                                            label="text1"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field
-                                            v-model="editedItem.carbs"
-                                            label="Carbs (g)"
+                                            v-model="editedItem.text2"
+                                            label="text2"
                                         ></v-text-field>
                                     </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.protein"
-                                            label="Protein (g)"
-                                        ></v-text-field>
+                                    <v-col cols="12">
+                                        <v-file-input
+                                            ref="file"
+                                            v-model="files"
+                                            show-size
+                                            label="Фото"
+                                            >Фото
+                                        </v-file-input>
                                     </v-col>
                                 </v-row>
                             </v-container>
@@ -96,29 +116,34 @@ export default {
                 text: 'Название',
                 align: 'left',
                 sortable: false,
-                value: 'text'
+                value: 'productName'
             },
-            { text: 'Calories', value: 'calories' },
-            { text: 'Fat (g)', value: 'fat' },
-            { text: 'Carbs (g)', value: 'carbs' },
-            { text: 'Цена', value: 'text1' },
+            { text: 'Text', value: 'text' },
+            { text: 'Text1', value: 'text1' },
+            { text: 'Text2', value: 'text2' },
+            { text: 'Цена', value: 'price' },
             { text: 'Изменить', value: 'action', sortable: false }
         ],
         productsFormList: [],
         editedIndex: -1,
+        files: null,
         editedItem: {
-            name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0
+            productName: '',
+            description: '',
+            price: null,
+            imageName: '',
+            text: '',
+            text1: '',
+            text2: ''
         },
         defaultItem: {
-            name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0
+            productName: '',
+            description: '',
+            price: null,
+            imageName: '',
+            text: '',
+            text1: '',
+            text2: ''
         }
     }),
 
@@ -146,9 +171,7 @@ export default {
     },
 
     methods: {
-        initialize() {
-            console.log('reeegggfd')
-        },
+        initialize() {},
         editItem(item) {
             this.editedIndex = this.productsFormList.indexOf(item)
             this.editedItem = Object.assign({}, item)
@@ -169,7 +192,7 @@ export default {
             }, 300)
         },
 
-        save() {
+        async save() {
             if (this.editedIndex > -1) {
                 Object.assign(
                     this.productsFormList[this.editedIndex],
@@ -177,6 +200,19 @@ export default {
                 )
             } else {
                 this.productsFormList.push(this.editedItem)
+                if (this.files) {
+                    const formData = new FormData()
+                    formData.append('image', this.files, this.files.name)
+                    await this.$axios
+                        .$post(
+                            'http://192.168.0.206:9000/product/upload',
+                            formData
+                        )
+                        .then((response) => {
+                            this.editedItem.imageName = response
+                        })
+                }
+                this.$store.dispatch('products/objSave', this.editedItem)
             }
             this.close()
         }

@@ -8,8 +8,43 @@
             fixed
             width="200"
             app
+            temporary
         >
-            <v-list dense rounded>
+            <v-list dense nav class="py-0">
+                <v-list-item :class="miniVariant && 'px-0'" two-line>
+                    <v-list-item-avatar>
+                        <img
+                            src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
+                        />
+                    </v-list-item-avatar>
+
+                    <v-list-item-content>
+                        <v-list-item-title>Application</v-list-item-title>
+                        <v-list-item-subtitle>Subtext</v-list-item-subtitle>
+                    </v-list-item-content>
+                </v-list-item>
+
+                <v-divider></v-divider>
+
+                <v-list-item
+                    v-for="(item, i) in items"
+                    :key="i"
+                    :to="item.to"
+                    link
+                    router
+                    exact
+                >
+                    <v-list-item-icon>
+                        <v-icon>{{ item.icon }}</v-icon>
+                    </v-list-item-icon>
+
+                    <v-list-item-content>
+                        <v-list-item-title>{{ item.title }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+
+            <!--<v-list dense rounded>
                 <v-list-item
                     v-for="(item, i) in items"
                     :key="i"
@@ -24,7 +59,11 @@
                         <v-list-item-title v-text="item.title" />
                     </v-list-item-content>
                 </v-list-item>
-                <!--<v-expansion-panels focusable>
+
+
+
+            </v-list>-->
+            <!--<v-expansion-panels focusable>
                     <v-expansion-panel v-for="(item, i) in 5" :key="i">
                         <v-expansion-panel-header
                             >Item</v-expansion-panel-header
@@ -38,11 +77,10 @@
                         </v-expansion-panel-content>
                     </v-expansion-panel>
                 </v-expansion-panels>-->
-            </v-list>
         </v-navigation-drawer>
         <v-app-bar :clipped-left="clipped" fixed app>
             <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-            <v-btn @click.stop="miniVariant = !miniVariant" icon>
+            <!--<v-btn @click.stop="miniVariant = !miniVariant" icon>
                 <v-icon
                     >mdi-{{
                         `chevron-${miniVariant ? 'right' : 'left'}`
@@ -51,12 +89,89 @@
             </v-btn>
             <v-btn @click.stop="clipped = !clipped" icon>
                 <v-icon>mdi-application</v-icon>
-            </v-btn>
+            </v-btn>-->
             <v-toolbar-title v-text="title" />
             <v-spacer />
-            <v-btn @click.stop="rightDrawer = !rightDrawer" icon>
+            <v-menu
+                v-model="menu"
+                :close-on-content-click="false"
+                :nudge-width="200"
+                transition="slide-x-transition"
+            >
+                <template v-slot:activator="{ on }">
+                    <v-btn v-on="on" color="deep-purple" dark>
+                        Меню
+                    </v-btn>
+                </template>
+
+                <v-card>
+                    <v-list>
+                        <v-list-item>
+                            <v-list-item-avatar>
+                                <img
+                                    src="https://cdn.vuetifyjs.com/images/john.jpg"
+                                    alt="John"
+                                />
+                            </v-list-item-avatar>
+
+                            <v-list-item-content>
+                                <v-list-item-title>Повар</v-list-item-title>
+                                <v-list-item-subtitle
+                                    >режим</v-list-item-subtitle
+                                >
+                            </v-list-item-content>
+
+                            <v-list-item-action>
+                                <v-btn
+                                    :class="fav ? 'red--text' : ''"
+                                    @click="fav = !fav"
+                                    icon
+                                >
+                                    <v-icon>mdi-heart</v-icon>
+                                </v-btn>
+                            </v-list-item-action>
+                        </v-list-item>
+                    </v-list>
+
+                    <v-divider></v-divider>
+
+                    <v-list>
+                        <v-list-item>
+                            <v-list-item-action>
+                                <v-switch
+                                    v-model="message"
+                                    color="purple"
+                                ></v-switch>
+                            </v-list-item-action>
+                            <v-list-item-title
+                                >Enable messages</v-list-item-title
+                            >
+                        </v-list-item>
+
+                        <v-list-item>
+                            <v-list-item-action>
+                                <v-switch
+                                    v-model="hints"
+                                    color="purple"
+                                ></v-switch>
+                            </v-list-item-action>
+                            <v-list-item-title>Enable hints</v-list-item-title>
+                        </v-list-item>
+                    </v-list>
+
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn @click="menu = false" text>Cancel</v-btn>
+                        <v-btn @click="menu = false" color="primary" text
+                            >Save</v-btn
+                        >
+                    </v-card-actions>
+                </v-card>
+            </v-menu>
+            <!--<v-btn @click.stop="rightDrawer = !rightDrawer" icon>
                 <v-icon>mdi-menu</v-icon>
-            </v-btn>
+            </v-btn>-->
         </v-app-bar>
         <v-content>
             <v-container>
@@ -74,8 +189,16 @@ export default {
     data() {
         return {
             clipped: true,
-            drawer: true,
+            drawer: false,
             fixed: false,
+            miniVariant: false,
+            right: true,
+            rightDrawer: false,
+            title: 'Ресторан',
+            fav: true,
+            menu: false,
+            message: false,
+            hints: true,
             items: [
                 {
                     icon: 'mdi-apps',
@@ -107,11 +230,7 @@ export default {
                     title: 'Inspire',
                     to: '/inspire'
                 }
-            ],
-            miniVariant: false,
-            right: true,
-            rightDrawer: false,
-            title: 'Ресторан'
+            ]
         }
     }
 }
