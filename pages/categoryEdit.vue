@@ -1,7 +1,7 @@
 <template>
     <v-data-table
         :headers="headers"
-        :items="products"
+        :items="category"
         dense
         sort-by="calories"
         class="elevation-12"
@@ -13,7 +13,12 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="500px">
                     <template v-slot:activator="{ on }">
-                        <v-btn v-on="on" color="primary" small dark class="mb-2"
+                        <v-btn
+                            v-on="on"
+                            color="deep-purple"
+                            small
+                            dark
+                            class="mb-2"
                             >Добавить
                         </v-btn>
                     </template>
@@ -27,32 +32,20 @@
                                 <v-row>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field
-                                            v-model="editedItem.name"
-                                            label="Dessert name"
+                                            v-model="editedItem.categoryName"
+                                            label="название"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field
-                                            v-model="editedItem.calories"
+                                            v-model="editedItem.description"
                                             label="Calories"
                                         ></v-text-field>
                                     </v-col>
                                     <v-col cols="12" sm="6" md="4">
                                         <v-text-field
-                                            v-model="editedItem.fat"
+                                            v-model="editedItem.imageName"
                                             label="Fat (g)"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.carbs"
-                                            label="Carbs (g)"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.protein"
-                                            label="Protein (g)"
                                         ></v-text-field>
                                     </v-col>
                                 </v-row>
@@ -88,46 +81,40 @@
 
 <script>
 export default {
-    name: 'AddProducts',
+    name: 'CategoryEdit',
     data: () => ({
         dialog: false,
         headers: [
             {
                 text: 'Название',
                 align: 'left',
-                sortable: true,
-                value: 'text'
+                sortable: false,
+                value: 'categoryName'
             },
-            { text: 'Calories', value: 'calories' },
-            { text: 'Fat (g)', value: 'fat' },
-            { text: 'Carbs (g)', value: 'carbs' },
-            { text: 'Цена', value: 'text1' },
+            { text: 'Описание', value: 'description' },
+            { text: 'не знаю', value: 'fat' },
             { text: 'Изменить', value: 'action', sortable: false }
         ],
-        desserts: [],
+        categoryFormList: [],
         editedIndex: -1,
         editedItem: {
-            name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0
+            categoryName: '',
+            description: '',
+            imageName: ''
         },
         defaultItem: {
-            name: '',
-            calories: 0,
-            fat: 0,
-            carbs: 0,
-            protein: 0
+            categoryName: '',
+            description: '',
+            imageName: ''
         }
     }),
 
     computed: {
         formTitle() {
-            return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+            return this.editedIndex === -1 ? 'Добавить категорию' : 'Edit Item'
         },
-        products() {
-            return this.$store.getters['products/products']
+        category() {
+            return this.$store.getters['products/category']
         }
     },
     watch: {
@@ -135,9 +122,9 @@ export default {
             val || this.close()
         }
     },
-    async fetch({ store }) {
+    fetch({ store }) {
         if (store.getters['products/products'].length === 0) {
-            await store.dispatch('products/fetch')
+            store.dispatch('products/fetch')
         }
     },
 
@@ -150,13 +137,13 @@ export default {
             console.log('reeegggfd')
         },
         editItem(item) {
-            this.editedIndex = this.desserts.indexOf(item)
+            this.editedIndex = this.categoryFormList.indexOf(item)
             this.editedItem = Object.assign({}, item)
             this.dialog = true
         },
 
         deleteItem(item) {
-            const index = this.desserts.indexOf(item)
+            const index = this.categoryFormList.indexOf(item)
             confirm('Are you sure you want to delete this item?') &&
                 this.desserts.splice(index, 1)
         },
@@ -167,13 +154,18 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             }, 300)
+            this.$store.dispatch('products/fetch')
         },
 
         save() {
             if (this.editedIndex > -1) {
-                Object.assign(this.desserts[this.editedIndex], this.editedItem)
+                Object.assign(
+                    this.categoryFormList[this.editedIndex],
+                    this.editedItem
+                )
             } else {
-                this.desserts.push(this.editedItem)
+                this.categoryFormList.push(this.editedItem)
+                this.$store.dispatch('products/categorySave', this.editedItem)
             }
             this.close()
         }

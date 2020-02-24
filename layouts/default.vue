@@ -4,11 +4,10 @@
             v-model="drawer"
             :mini-variant="miniVariant"
             :clipped="clipped"
-            mobile-break-point="850"
+            mobile-break-point="1367"
             fixed
             width="200"
             app
-            temporary
         >
             <v-list dense nav class="py-0">
                 <v-list-item :class="miniVariant && 'px-0'" two-line>
@@ -19,8 +18,8 @@
                     </v-list-item-avatar>
 
                     <v-list-item-content>
-                        <v-list-item-title>Application</v-list-item-title>
-                        <v-list-item-subtitle>Subtext</v-list-item-subtitle>
+                        <v-list-item-title>Приложение</v-list-item-title>
+                        <v-list-item-subtitle>Марафон</v-list-item-subtitle>
                     </v-list-item-content>
                 </v-list-item>
 
@@ -92,6 +91,11 @@
             </v-btn>-->
             <v-toolbar-title v-text="title" />
             <v-spacer />
+            <v-tabs color="deep-purple" right>
+                <v-tab>Салаты</v-tab>
+                <v-tab>Кофе</v-tab>
+                <v-tab>Кухня</v-tab>
+            </v-tabs>
             <v-menu
                 v-model="menu"
                 :close-on-content-click="false"
@@ -99,7 +103,7 @@
                 transition="slide-x-transition"
             >
                 <template v-slot:activator="{ on }">
-                    <v-btn v-on="on" color="deep-purple" dark>
+                    <v-btn v-on="on" color="deep-purple" dark text>
                         Меню
                     </v-btn>
                 </template>
@@ -117,8 +121,8 @@
                             <v-list-item-content>
                                 <v-list-item-title>Повар</v-list-item-title>
                                 <v-list-item-subtitle
-                                    >режим</v-list-item-subtitle
-                                >
+                                    >режим
+                                </v-list-item-subtitle>
                             </v-list-item-content>
 
                             <v-list-item-action>
@@ -144,8 +148,8 @@
                                 ></v-switch>
                             </v-list-item-action>
                             <v-list-item-title
-                                >Enable messages</v-list-item-title
-                            >
+                                >Включить ообщения
+                            </v-list-item-title>
                         </v-list-item>
 
                         <v-list-item>
@@ -155,17 +159,17 @@
                                     color="purple"
                                 ></v-switch>
                             </v-list-item-action>
-                            <v-list-item-title>Enable hints</v-list-item-title>
+                            <v-list-item-title>Режим повара</v-list-item-title>
                         </v-list-item>
                     </v-list>
 
                     <v-card-actions>
                         <v-spacer></v-spacer>
 
-                        <v-btn @click="menu = false" text>Cancel</v-btn>
-                        <v-btn @click="menu = false" color="primary" text
-                            >Save</v-btn
-                        >
+                        <v-btn @click="menu = false" text>Отмена</v-btn>
+                        <v-btn @click="menu = false" color="deep-purple" text
+                            >Запомнить
+                        </v-btn>
                     </v-card-actions>
                 </v-card>
             </v-menu>
@@ -178,8 +182,8 @@
                 <nuxt />
             </v-container>
         </v-content>
-        <v-footer :fixed="fixed" app>
-            <span>&copy; 2019</span>
+        <v-footer fixed elevation="12" height="30" width="100">
+            <span>&copy; 2020</span>
         </v-footer>
     </v-app>
 </template>
@@ -217,8 +221,8 @@ export default {
                 },
                 {
                     icon: 'mdi-apps',
-                    title: 'Редактор1',
-                    to: '/addProducts1'
+                    title: 'Категории',
+                    to: '/categoryEdit'
                 },
                 {
                     icon: 'mdi-apps',

@@ -1,109 +1,116 @@
 <template>
-    <v-data-table
-        :headers="headers"
-        :items="products"
-        dense
-        sort-by="calories"
-        class="elevation-12"
-    >
-        <template v-slot:top>
-            <v-toolbar flat>
-                <v-toolbar-title>Справочник</v-toolbar-title>
-                <v-divider class="mx-4" inset vertical></v-divider>
-                <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="500px">
-                    <template v-slot:activator="{ on }">
-                        <v-btn
-                            v-on="on"
-                            color="deep-purple"
-                            small
-                            dark
-                            class="mb-2"
-                            >Добавить
-                        </v-btn>
-                    </template>
-                    <v-card>
-                        <v-card-title>
-                            <span class="headline">{{ formTitle }}</span>
-                        </v-card-title>
-
-                        <v-card-text>
-                            <v-container>
-                                <v-row>
-                                    <v-col cols="12" sm="6" md="10">
-                                        <v-text-field
-                                            v-model="editedItem.productName"
-                                            label="Название"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="2">
-                                        <v-text-field
-                                            v-model.number="editedItem.price"
-                                            label="Цена"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="12">
-                                        <v-text-field
-                                            v-model="editedItem.description"
-                                            label="Описание"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.text"
-                                            label="text"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.text1"
-                                            label="text1"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12" sm="6" md="4">
-                                        <v-text-field
-                                            v-model="editedItem.text2"
-                                            label="text2"
-                                        ></v-text-field>
-                                    </v-col>
-                                    <v-col cols="12">
-                                        <v-file-input
-                                            ref="file"
-                                            v-model="files"
-                                            show-size
-                                            label="Фото"
-                                            >Фото
-                                        </v-file-input>
-                                    </v-col>
-                                </v-row>
-                            </v-container>
-                        </v-card-text>
-
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn @click="close" color="blue darken-1" text
-                                >Cancel
+    <div>
+        <div>
+            {{ category[0].categoryName }}
+        </div>
+        <v-data-table
+            :headers="headers"
+            :items="products"
+            dense
+            sort-by="calories"
+            class="elevation-12"
+        >
+            <template v-slot:top>
+                <v-toolbar flat>
+                    <v-toolbar-title>Справочник</v-toolbar-title>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-dialog v-model="dialog" max-width="500px">
+                        <template v-slot:activator="{ on }">
+                            <v-btn
+                                v-on="on"
+                                color="deep-purple"
+                                small
+                                dark
+                                class="mb-2"
+                                >Добавить
                             </v-btn>
-                            <v-btn @click="save" color="blue darken-1" text
-                                >Save
-                            </v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar>
-        </template>
-        <template v-slot:item.action="{ item }">
-            <v-icon @click="editItem(item)" small class="mr-2">
-                edit
-            </v-icon>
-            <v-icon @click="deleteItem(item)" small>
-                delete
-            </v-icon>
-        </template>
-        <template v-slot:no-data>
-            <v-btn @click="initialize" color="primary">Reset</v-btn>
-        </template>
-    </v-data-table>
+                        </template>
+                        <v-card>
+                            <v-card-title>
+                                <span class="headline">{{ formTitle }}</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="12" sm="6" md="10">
+                                            <v-text-field
+                                                v-model="editedItem.productName"
+                                                label="Название"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="2">
+                                            <v-text-field
+                                                v-model.number="
+                                                    editedItem.price
+                                                "
+                                                label="Цена"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="12">
+                                            <v-text-field
+                                                v-model="editedItem.description"
+                                                label="Описание"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field
+                                                v-model="editedItem.text"
+                                                label="text"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field
+                                                v-model="editedItem.text1"
+                                                label="text1"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="4">
+                                            <v-text-field
+                                                v-model="editedItem.text2"
+                                                label="text2"
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-file-input
+                                                ref="file"
+                                                v-model="files"
+                                                show-size
+                                                label="Фото"
+                                                >Фото
+                                            </v-file-input>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn @click="close" color="blue darken-1" text
+                                    >Отмена
+                                </v-btn>
+                                <v-btn @click="save" color="blue darken-1" text
+                                    >Добавить
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-toolbar>
+            </template>
+            <template v-slot:item.action="{ item }">
+                <v-icon @click="editItem(item)" small class="mr-2">
+                    edit
+                </v-icon>
+                <v-icon @click="deleteItem(item)" small>
+                    delete
+                </v-icon>
+            </template>
+            <template v-slot:no-data>
+                <v-btn @click="initialize" color="primary">Reset</v-btn>
+            </template>
+        </v-data-table>
+    </div>
 </template>
 
 <script>
@@ -153,6 +160,9 @@ export default {
         },
         products() {
             return this.$store.getters['products/products']
+        },
+        category() {
+            return this.$store.getters['products/category']
         }
     },
     watch: {
@@ -163,6 +173,7 @@ export default {
     async fetch({ store }) {
         if (store.getters['products/products'].length === 0) {
             await store.dispatch('products/fetch')
+            // await store.dispatch('products/fetchCategory')
         }
     },
 
@@ -190,9 +201,10 @@ export default {
                 this.editedItem = Object.assign({}, this.defaultItem)
                 this.editedIndex = -1
             }, 300)
+            this.$store.dispatch('products/fetch')
         },
 
-        async save() {
+        save() {
             if (this.editedIndex > -1) {
                 Object.assign(
                     this.productsFormList[this.editedIndex],
@@ -200,20 +212,23 @@ export default {
                 )
             } else {
                 this.productsFormList.push(this.editedItem)
-                if (this.files) {
-                    const formData = new FormData()
-                    formData.append('image', this.files, this.files.name)
-                    await this.$axios
-                        .$post(
-                            'http://192.168.0.206:9000/product/upload',
-                            formData
-                        )
-                        .then((response) => {
-                            this.editedItem.imageName = response
-                        })
+
+                const formData = new FormData()
+                for (const item in this.editedItem) {
+                    formData.append(item, this.editedItem[item])
                 }
-                this.$store.dispatch('products/objSave', this.editedItem)
+                formData.append('image', this.files)
+                /* await this.$axios
+                                .$post(
+                                    'http://localhost:9090/api/products',
+                                    formData
+                                ) */
+                this.$store.dispatch('products/objSave', formData)
+                /* .then((response) => {
+                                this.editedItem.imageName = response
+                            }) */
             }
+            // this.$store.dispatch('products/objSave', this.editedItem)
             this.close()
         }
     }

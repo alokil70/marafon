@@ -1,25 +1,35 @@
 import { URL } from '../assets/constants'
 
 export const state = () => ({
-    products: []
+    products: [],
+    category: []
 })
 
 export const mutations = {
     setProducts(state, products) {
         state.products = products
+    },
+    setCategory(state, category) {
+        state.category = category
     }
 }
 
 export const actions = {
     async fetch({ commit }) {
-        const products = await this.$axios.$get(URL)
+        const products = await this.$axios.$get(URL + '/products')
         commit('setProducts', products)
+        const category = await this.$axios.$get(URL + '/category')
+        commit('setCategory', category)
     },
     async objSave({ commit }, postData) {
-        await this.$axios.$post(URL, postData)
+        await this.$axios.$post(URL + '/products', postData)
+    },
+    async categorySave({ commit }, postData) {
+        await this.$axios.$post(URL + '/category', postData)
     }
 }
 
 export const getters = {
-    products: (s) => s.products
+    products: (s) => s.products,
+    category: (s) => s.category
 }
