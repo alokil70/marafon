@@ -1,72 +1,36 @@
 <template>
-    <v-layout row justify-center>
+    <v-layout row justify-center align-center>
         <v-row class="flex" justify="center">
             <v-card
-                :loading="loading"
                 v-for="p in products"
                 :key="p.id"
-                class="mx-auto my-3"
-                max-width="374"
+                :ripple="true"
+                @click="show"
+                :img="`${URL_IMG}${p.imageName}`"
                 elevation="24"
-                shaped
+                height="400px"
+                class="portrait"
+                >{{ p.productName }}</v-card
             >
-                <v-img
-                    :src="`${URL_IMG}${p.imageName}`"
-                    height="350"
-                    class="white--text align-end"
-                >
-                    <v-card-title v-text="p.productName" />
-                    <v-card-title v-text="p.price" />
-                </v-img>
-
-                <v-card-text>
-                    <v-row align="center" class="mx-0">
-                        <v-rating
-                            :value="4.5"
-                            color="amber"
-                            dense
-                            half-increments
-                            readonly
-                            size="14"
-                        ></v-rating>
-
-                        <div class="grey--text ml-4">4.5 (413)</div>
-                    </v-row>
-
-                    <!--<div class="my-4 subtitle-1 black&#45;&#45;text">
-                        {{ p.text1 }}
-                    </div>-->
-
-                    <i v-text="p.description" class="text-small"></i>
-                </v-card-text>
-
-                <v-divider class="mx-4"></v-divider>
-
-                <v-card-title>Доступно для заказа</v-card-title>
-
-                <v-card-text>
-                    <v-chip-group
-                        v-model="selection"
-                        active-class="deep-purple accent-4 white--text"
-                        column
-                    >
-                        <v-chip>5:30PM</v-chip>
-
-                        <v-chip>7:30PM</v-chip>
-
-                        <v-chip>8:00PM</v-chip>
-
-                        <v-chip>9:00PM</v-chip>
-                    </v-chip-group>
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-btn @click="reserve" color="orange" text>
-                        Заказать
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
         </v-row>
+
+        <v-menu
+            v-model="showMenu"
+            :position-x="x"
+            :position-y="y"
+            absolute
+            offset-y
+        >
+            <v-list>
+                <v-list-item
+                    v-for="(item, index) in items"
+                    :key="index"
+                    @click=""
+                >
+                    <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item>
+            </v-list>
+        </v-menu>
     </v-layout>
 </template>
 
@@ -76,8 +40,15 @@ import { URL_IMG } from '../assets/constants'
 export default {
     data: () => ({
         URL_IMG,
-        loading: false,
-        selection: 1
+        showMenu: false,
+        x: 0,
+        y: 0,
+        items: [
+            { title: 'Что-то' },
+            { title: 'Какой-то выбор' },
+            { title: 'Что-нибуть' },
+            { title: 'И это ))' }
+        ]
     }),
     computed: {
         products() {
@@ -90,10 +61,14 @@ export default {
         }
     },
     methods: {
-        reserve() {
-            this.loading = true
-
-            setTimeout(() => (this.loading = false), 2000)
+        show(e) {
+            e.preventDefault()
+            this.showMenu = false
+            this.x = e.clientX
+            this.y = e.clientY
+            this.$nextTick(() => {
+                this.showMenu = true
+            })
         }
     }
 }
