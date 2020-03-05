@@ -92,12 +92,9 @@
             <v-toolbar-title v-text="title" />
             <v-spacer />
             <v-tabs color="deep-purple" right>
-                <v-tab>Салаты</v-tab>
-                <v-tab>Кофе</v-tab>
-                <v-tab>Кухня</v-tab>
-                <v-tab>МЯСО</v-tab>
-                <v-tab>РЫБА</v-tab>
-                <v-tab>СУПЫ</v-tab>
+                <v-tab v-for="ctg in category" :key="ctg.id">{{
+                    ctg.categoryName
+                }}</v-tab>
             </v-tabs>
             <v-menu
                 v-model="menu"
@@ -193,6 +190,14 @@
 
 <script>
 export default {
+    computed: {
+        products() {
+            return this.$store.getters['products/products']
+        },
+        category() {
+            return this.$store.getters['products/category']
+        }
+    },
     data() {
         return {
             clipped: true,

@@ -128,14 +128,7 @@ export default {
         }
     },
 
-    created() {
-        this.initialize()
-    },
-
     methods: {
-        initialize() {
-            console.log('reeegggfd')
-        },
         editItem(item) {
             this.editedIndex = this.categoryFormList.indexOf(item)
             this.editedItem = Object.assign({}, item)

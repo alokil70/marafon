@@ -72,7 +72,7 @@
                                         <v-col cols="12" sm="6">
                                             <v-select
                                                 :items="category"
-                                                v-model="editedItem.categoryId"
+                                                v-model="temp"
                                                 item-text="categoryName"
                                                 label="Категория"
                                                 required
@@ -133,13 +133,14 @@ export default {
             },
             { text: 'Text', value: 'text' },
             { text: 'Text1', value: 'text1' },
-            { text: 'categoryId', value: 'categoryId' },
+            { text: 'Category', value: 'CategoryId' },
             { text: 'Цена', value: 'price' },
             { text: 'Изменить', value: 'action', sortable: false }
         ],
         productsFormList: [],
         editedIndex: -1,
         files: null,
+        temp: '',
         editedItem: {
             productName: '',
             description: '',
@@ -157,7 +158,8 @@ export default {
             imageName: '',
             text: '',
             text1: '',
-            text2: ''
+            text2: '',
+            categoryId: ''
         }
     }),
 
@@ -193,8 +195,7 @@ export default {
 
         deleteItem(item) {
             const index = this.productsFormList.indexOf(item)
-            confirm('Are you sure you want to delete this item?') &&
-                this.productsFormList.splice(index, 1)
+            confirm('Удалить?') && this.productsFormList.splice(index, 1)
             this.$store.dispatch('products/productDelete', item.id)
             this.$store.dispatch('products/fetch')
         },
@@ -217,23 +218,21 @@ export default {
             } else {
                 this.productsFormList.push(this.editedItem)
 
+                const obj = this.category.find(
+                    (v) => v.categoryName === this.temp
+                )
+                this.editedItem.categoryId = obj.id
+
                 const formData = new FormData()
                 for (const item in this.editedItem) {
                     formData.append(item, this.editedItem[item])
                 }
                 formData.append('image', this.files)
-                /* await this.$axios
-                                .$post(
-                                    'http://localhost:9090/api/products',
-                                    formData
-                                ) */
-                console.log(this.productsFormList)
+
                 this.$store.dispatch('products/objSave', formData)
-                /* .then((response) => {
-                                this.editedItem.imageName = response
-                            }) */
             }
-            // this.$store.dispatch('products/objSave', this.editedItem)
+            this.files = null
+            this.temp = ''
             this.close()
         }
     }
