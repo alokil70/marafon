@@ -95,6 +95,9 @@
                 <v-tab>Салаты</v-tab>
                 <v-tab>Кофе</v-tab>
                 <v-tab>Кухня</v-tab>
+                <v-tab>МЯСО</v-tab>
+                <v-tab>РЫБА</v-tab>
+                <v-tab>СУПЫ</v-tab>
             </v-tabs>
             <v-menu
                 v-model="menu"

@@ -7,7 +7,7 @@
                 :key="p.id"
                 class="mx-auto my-3"
                 max-width="374"
-                elevation="24"
+                elevation="16"
                 shaped
             >
                 <v-img :src="`${URL_IMG}${p.imageName}`" height="350">

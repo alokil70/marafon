@@ -26,6 +26,9 @@ export const actions = {
     },
     async categorySave({ commit }, postData) {
         await this.$axios.$post(URL + '/category', postData)
+    },
+    async productDelete({ commit }, productId) {
+        await this.$axios.$post(URL + '/products/delete/' + productId)
     }
 }
 
